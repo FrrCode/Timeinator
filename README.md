@@ -5,6 +5,7 @@ state is one SQLite file.
 
 Live at **[timeinator.frrcode.com](https://timeinator.frrcode.com)**.
 Developed by [frrcode](https://frrcode.com).
+More on the [about page](https://apps.frrcode.com/en/timeinator/).
 
 ![Four time zones as rows, hours as columns, each cell coloured by how reasonable that hour is locally](docs/screenshots/overview.png)
 
@@ -167,5 +168,6 @@ sense. The [LICENSE](LICENSE) is short if that distinction matters to you.
 
 ---
 
-Developed by **[frrcode](https://frrcode.com)**. Design by
-[Elizaveta Solntse](https://www.instagram.com/elizaveta_solntse) ☀️
+Developed by **[frrcode](https://frrcode.com)**.
+Source on [GitHub](https://github.com/FrrCode/Timeinator) ·
+[About](https://apps.frrcode.com/en/timeinator/)

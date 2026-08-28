@@ -204,7 +204,7 @@ export function HomePage() {
 				<p className="text-muted-foreground text-xs md:my-3">
 					<a
 						className="underline hover:text-primary"
-						href="https://github.com/petr-nazarov/timeinator"
+						href="https://github.com/FrrCode/Timeinator"
 						target="_blank"
 						rel="noreferrer"
 					>
@@ -212,14 +212,13 @@ export function HomePage() {
 					</a>
 				</p>
 				<p className="mb-3 text-muted-foreground text-xs md:my-3 md:pr-6">
-					Design by{" "}
 					<a
 						className="underline hover:text-primary"
-						href="https://www.instagram.com/elizaveta_solntse?igsh=MWN4MG1lZTVzczBtOA=="
+						href="https://apps.frrcode.com/en/timeinator/"
 						target="_blank"
 						rel="noreferrer"
 					>
-						Elizaveta Solntse ☀️
+						About
 					</a>
 				</p>
 			</div>
