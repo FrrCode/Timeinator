@@ -1,0 +1,26 @@
+{
+	"compilerOptions": {
+		"lib": ["ESNext", "DOM", "DOM.Iterable"],
+		"module": "ESNext",
+		"target": "ESNext",
+		"moduleResolution": "bundler",
+		"baseUrl": ".",
+		"paths": {
+			"@/*": ["./src/*"]
+		},
+		"moduleDetection": "force",
+		"noEmit": true,
+		"strict": true,
+		"skipLibCheck": true,
+		"jsx": "react-jsx",
+		"allowSyntheticDefaultImports": true,
+		"forceConsistentCasingInFileNames": true,
+		"isolatedModules": true,
+		"resolveJsonModule": true,
+		"allowImportingTsExtensions": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"types": ["vite/client", "node", "vite-plugin-pwa/client"]
+	},
+	"include": ["src", "shared", "vite.config.ts", "vitest.config.ts"]
+}

@@ -1,0 +1,33 @@
+# Build outputs
+dist
+.cache
+
+# Node dependencies
+node_modules
+
+# Logs
+logs
+*.log
+
+# Misc
+.DS_Store
+.fleet
+.idea
+
+# Local env files
+.env
+.env.*
+!.env.example
+.vercel
+
+# SQLite database for the Pick Time polls.
+data/
+
+# Throwaway SQLite data from `just docker-run`.
+.docker-data/
+
+# Visual brainstorming mockups.
+.superpowers/
+
+# Throwaway database the screenshot script writes.
+.screenshot-data/

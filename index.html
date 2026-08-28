@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="%SITE_THEME_COLOR%" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="%SITE_NAME%" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <!-- %SITE_*% placeholders are filled from src/lib/consts.ts at build time. -->
+    <title>%SITE_TITLE%</title>
+    <meta name="description" content="%SITE_DESCRIPTION%" />
+    <meta name="og:title" content="%SITE_OG_TITLE%" />
+    <meta name="og:type" content="website" />
+    <meta name="og:url" content="%SITE_URL%/" />
+    <meta name="og:image" content="%SITE_OG_IMAGE%" />
+    <meta name="og:description" content="%SITE_DESCRIPTION%" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:description" content="%SITE_DESCRIPTION%" />
+    <meta name="twitter:image" content="%SITE_OG_IMAGE%" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
