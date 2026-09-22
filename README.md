@@ -97,27 +97,66 @@ and you have copied the whole application state.
 answer, so it returns 503 if the volume is missing or unwritable rather than
 claiming to be fine.
 
-### Deploying
+### With Docker
 
-One Docker image holds the built app and the API, served by a single process.
-There is no separate web container because there is nothing for one to do.
+Each release is published as a multi-arch image (amd64, arm64):
 
 ```bash
-just docker-run                  # build and run it locally on :4002
-just deploy                      # build, ship over ssh, restart
+docker run -d -p 4002:4002 -v "$PWD/data:/data" ghcr.io/frrcode/timeinator:latest
+```
+
+or `docker compose up -d` with the [`compose.yaml`](compose.yaml) in this repo.
+The tags are `X.Y.Z`, `X.Y` and `latest`, which is always the newest release,
+never whatever is on `main`.
+
+One image holds the built app and the API, served by a single process. There is
+no separate web container because there is nothing for one to do.
+
+```bash
+just docker-run     # build the image from this checkout and run it on :4002
+just smoke          # check a built image the way CI does before publishing
+```
+
+### Deploying
+
+Production only ever runs a published image, so what is live is exactly what CI
+smoke-tested.
+
+```bash
+just deploy                      # pull the newest release, recreate, wait for healthy
 DEPLOY_HOST=my-server just deploy
 ```
 
-`scripts/deploy.sh` sends the image straight to the host with
-`docker save | ssh docker load`. No registry, since for one box that is more
-moving parts than the thing being deployed. It tags with the commit hash and
-refuses a dirty tree.
+`scripts/deploy.sh` makes one ssh connection, runs `docker compose pull` and
+`up --force-recreate --wait` for the one service, and fails if it does not come
+up healthy. `DEPLOY_DIR`, `DEPLOY_SERVICE` and `DEPLOY_IMAGE` override the rest.
 
 It will not touch your compose file or reverse proxy config, because those
-usually carry other projects. Set those up once: a service using the image with
-`./data/timeinator:/data` mounted, and a proxy rule pointing at its port. Or skip
-Docker entirely and run `pnpm build && pnpm start` behind whatever you already
-use.
+usually carry other projects. Set those up once: a service using
+`ghcr.io/frrcode/timeinator:latest` with `./data/timeinator:/data` mounted, and a
+proxy rule pointing at its port. Or skip Docker entirely and run
+`pnpm build && pnpm start` behind whatever you already use.
+
+### Releases and the changelog
+
+Commit messages follow [Conventional Commits](https://www.conventionalcommits.org)
+(`feat(pick): …`, `fix: …`, `feat!: …` for breaking changes). They are the only
+place release notes are written: [`CHANGELOG.md`](CHANGELOG.md) is generated from
+them by `scripts/changelog.ts`, and CI regenerates and commits it after every
+push to `main`.
+
+```bash
+just release          # patch; or `just release minor` / `just release major`
+git pull              # pick up CI's changelog commit
+gh run watch
+just deploy
+```
+
+`just release` refuses anything but a clean `main`, catches up with
+`origin/main`, bumps `package.json`, commits `chore(release): vX.Y.Z`, tags it and
+pushes branch and tag atomically. The tag is the only thing that publishes: it
+makes CI build, smoke-test and push the image, write the changelog section and
+create the GitHub release from it.
 
 ### Making it yours
 

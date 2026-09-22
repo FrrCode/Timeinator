@@ -59,11 +59,32 @@ docker-run port="4002":
         -v "$PWD/.docker-data:/data" \
         timeinator:local
 
-# The server's shared docker-compose.yml and Caddyfile are placed by hand, not by
-# this — they carry six other projects. DEPLOY_HOST overrides the ssh alias;
-# ALLOW_DIRTY=1 tags an uncommitted tree.
+# Check a built image the way CI does before publishing it.
+smoke image="timeinator:local":
+    ./scripts/smoke.sh {{ image }}
 
-# Build the image, ship it over ssh, restart the service, wait for healthy.
+# Rewrite CHANGELOG.md from the commit history.
+changelog:
+    pnpm changelog
+
+# Fail if CHANGELOG.md is out of date with the history.
+changelog-check:
+    pnpm changelog --check
+
+# The tag push is what publishes: CI builds and pushes the image, updates
+# CHANGELOG.md and creates the GitHub release. `git pull` afterwards for CI's
+# changelog commit.
+
+# Bump the version, commit, tag and push: patch, minor or major.
+release bump="patch":
+    ./scripts/release.sh {{ bump }}
+
+# Deploys a published image, never a local build. The server's shared
+# docker-compose.yml and Caddyfile are placed by hand, not by this — they carry
+# six other projects. DEPLOY_HOST, DEPLOY_DIR, DEPLOY_SERVICE and DEPLOY_IMAGE
+# override the defaults.
+
+# Pull the newest release on the server, recreate the service, wait for healthy.
 deploy:
     ./scripts/deploy.sh
     ntf "Timinator" "Deployed to server"

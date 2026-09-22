@@ -31,3 +31,6 @@ data/
 
 # Throwaway database the screenshot script writes.
 .screenshot-data/
+
+# Scratch space.
+tmp/

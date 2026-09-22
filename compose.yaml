@@ -1,0 +1,23 @@
+# Running the published image. Copy this next to a `data/` directory and
+# `docker compose up -d`; the whole application state is data/timeinator.db.
+#
+# Behind a reverse proxy, drop `ports` and join the proxy's network instead, so
+# only the proxy can reach it.
+services:
+  timeinator:
+    # `latest` is the newest release. Pin X.Y.Z instead to make upgrades an
+    # explicit edit.
+    image: ghcr.io/frrcode/timeinator:latest
+    restart: unless-stopped
+    ports:
+      - "4002:4002"
+    volumes:
+      # A directory rather than a named volume, so the database can be backed up
+      # and inspected with ordinary tools. The entrypoint takes ownership of it.
+      - ./data:/data
+    # Without a limit the OOM killer picks whatever is largest when memory runs
+    # out, which is rarely the culprit.
+    mem_limit: 192m
+    environment:
+      # Below mem_limit, so V8 collects garbage rather than being killed.
+      NODE_OPTIONS: --max-old-space-size=128
