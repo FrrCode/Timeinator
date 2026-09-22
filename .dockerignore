@@ -1,6 +1,15 @@
-node_modules
-dist
-data
-.git
-docs
-*.log
+# An allowlist: nothing reaches the build context unless it is named here, so
+# local data, env files and anything else personal cannot leak into a published
+# image by accident.
+*
+!package.json
+!pnpm-lock.yaml
+!index.html
+!tsconfig.json
+!vite.config.ts
+!vitest.config.ts
+!src
+!server
+!shared
+!public
+!docker/entrypoint.sh
