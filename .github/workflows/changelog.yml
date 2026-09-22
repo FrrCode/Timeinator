@@ -15,9 +15,12 @@ permissions:
   contents: write
 
 # Queued, never cancelled: aborting a run halfway through its commit and push
-# would leave main behind the history it describes.
+# would leave main behind the history it describes. One group per ref, because a
+# group holds a single pending run and drops the rest: `just release` pushes the
+# branch and the tag together, and sharing a group cancelled the tag's run. Only
+# the branch run commits, so the two cannot race on main.
 concurrency:
-  group: changelog
+  group: changelog-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
@@ -35,10 +38,14 @@ jobs:
         with:
           node-version: 24
 
+      # The tag's section is already there: the atomic push put the tag on the
+      # remote before either run started.
       - name: Regenerate and commit
+        if: startsWith(github.ref, 'refs/heads/')
         run: |
           node scripts/changelog.ts
-          if git diff --quiet -- CHANGELOG.md; then
+          # status, not diff: diff ignores the file while it is still untracked.
+          if [ -z "$(git status --porcelain -- CHANGELOG.md)" ]; then
             echo "CHANGELOG.md is current."
             exit 0
           fi
